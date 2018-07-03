@@ -1,5 +1,2 @@
-require "cupcake_recipes/version"
-
-module CupcakeRecipes
-  # Your code goes here...
-end
+require_relative './cupcake_recipes/version'
+require_relative './cupcake_recipes/cli'

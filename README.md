@@ -1,8 +1,6 @@
 # CupcakeRecipes
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/cupcake_recipes`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Welcome to my cupcake recipes gem! In my spare time and for special occasions I enjoy baking, in particular cupcakes. There are endless variations to try and I find myself using a variety of recipes from different websites. Therefore, I built this gem to scrap recipes from several of my favorite food/baking blogs to consolidate recipes in one place. 
 
 ## Installation
 
