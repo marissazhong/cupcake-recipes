@@ -5,9 +5,9 @@ class CupcakeRecipes::Recipes
     # ssr = Sugar Spun Run
     # sba = Sally's Baking Addiction
 
-    attr_accessor :name, :type, :url, :source
+    attr_accessor :name, :type, :url, :source, :recipe
 
-    def self.scrape_recipes
+    def self.scrape_all_recipes
         recipes_vanilla, recipes_chocolate, recipes_lucky = [], [], []
 
         recipes_vanilla = [self.scrape_nk[0], self.scrape_ssr[0], self.scrape_sba[0]].flatten!(1)
@@ -15,6 +15,10 @@ class CupcakeRecipes::Recipes
         recipes_lucky = [self.scrape_nk[2], self.scrape_ssr[2], self.scrape_sba[2]].flatten!(1)
 
         recipes = [recipes_vanilla, recipes_chocolate, recipes_lucky]
+    end
+
+    def self.scrape_single_recipe
+
     end
 
     def self.scrape_nk
@@ -25,11 +29,11 @@ class CupcakeRecipes::Recipes
             recipe_name = recipe.text.strip
             recipe_url = recipe.attribute('href').value
             if recipe_name.include?("Vanilla Cupcake")
-                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Natasha's Kitchen"}
+                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_recipe(recipe_url)}
             elsif recipe_name.include?("Chocolate Cupcake")
-                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Natasha's Kitchen"}
+                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_recipe(recipe_url)}
             elsif recipe_name.include?("Cupcake")
-                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Natasha's Kitchen"}
+                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_recipe(recipe_url)}
             end
         }
         recipes_nk = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
@@ -37,14 +41,15 @@ class CupcakeRecipes::Recipes
 
     def self.scrape_nk_recipe(recipe_url)
         doc = Nokogiri::HTML(open(recipe_url))
-        recipe = {ingredients: nil, directions: nil}
+        ingredients, directions = [],[]
 
-        doc.css("wprm-recipe-ingredients").each {|ingredient|
-
-        
+        doc.css(".wprm-recipe-ingredient").each {|ingredient|
+            ingredients << "#{ingredient.css(".wprm-recipe-ingredient-amount").inner_html} #{ingredient.css(".wprm-recipe-ingredient-unit").inner_html} #{ingredient.css(".wprm-recipe-ingredient-name").inner_html}"
         }
-
-
+        doc.css(".wprm-recipe-instruction-text").each {|direction|
+            directions << direction.inner_html
+        }
+        recipe = {ingredients: ingredients, directions: directions}
     end
 
     def self.scrape_ssr

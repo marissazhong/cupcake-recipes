@@ -20,10 +20,11 @@ class CupcakeRecipes::CLI
     def get_recipes
         puts "What flavor cupcake would you like to bake?", "(Enter 1-3 or 'exit' for 1. Vanilla, 2. Chocolate, and 3. I'm feeling adventurous!)"
         input_flavor = gets.strip
-        @recipes = CupcakeRecipes::Recipes.scrape_recipes
+        # need to implement method to store scraped recipes over multiple iterations
+        @recipes = CupcakeRecipes::Recipes.scrape_all_recipes
         if input_flavor == "1" || input_flavor == "2" || input_flavor == "3"
-            sorted_recipes = @recipes[input_flavor.to_i-1].sort {|x,y| x[:name] <=> y[:name]}
-            sorted_recipes.each.with_index(1) {|recipe,i|
+            @sorted_recipes = @recipes[input_flavor.to_i-1].sort {|x,y| x[:name] <=> y[:name]}
+            @sorted_recipes.each.with_index(1) {|recipe,i|
                 puts "#{i}. #{recipe[:name]} - #{recipe[:source]}"
             }
         elsif input_flavor!="exit"
@@ -37,8 +38,11 @@ class CupcakeRecipes::CLI
         while input_recipe != 'exit'
             puts "Enter the number of the recipe you'd like to see or type 'exit':"
             input_recipe = gets.strip.downcase
+            # need to implement more robust check for invalid input
             if input_recipe != 'exit'
-                puts "recipe here"
+                
+
+
                 puts "Would you like to see another recipe? (y/n):"
                 continue = gets.strip.downcase
                 if continue == 'y'
