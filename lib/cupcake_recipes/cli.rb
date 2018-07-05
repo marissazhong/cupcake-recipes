@@ -18,17 +18,20 @@ class CupcakeRecipes::CLI
     end
 
     def get_recipes
-        puts "What flavor cupcake would you like to bake?", "(Enter 1-3 for 1. Vanilla, 2. Chocolate, and 3. I'm feeling adventurous!)"
-        input_flavor = gets.strip.to_i
-        #scrap websites to get recipes
-        puts <<-DOC.gsub /^\s*/, ''
-            1. Perfect Vanilla Cupcake Recipe - Natasha's Kitchen
-            2. Easy Vanilla Cupcakes - Sugar Spun Run
-            3. Perfect Vanilla Cupcakes with Caramel Flavored Icing - Sugar Spun Run
-            4. Simply Perfect Vanilla Cupcakes - Sally's Baking Addiction
-            5. Very Vanilla Cupcakes - Sally's Baking Addiction
-            6. Vanilla Cupcakes for Two - Sally's Baking Addiction
-        DOC
+        puts "What flavor cupcake would you like to bake?", "(Enter 1-3 or 'exit' for 1. Vanilla, 2. Chocolate, and 3. I'm feeling adventurous!)"
+        input_flavor = gets.strip
+        @recipes = CupcakeRecipes::Recipes.scrape_recipes
+        case
+        when input_flavor=="1"
+            @recipes[0]
+        when input_flavor=="2"
+            @recipes[1]
+        when input_flavor=="3"
+            @recipes[2]
+        when input_flavor!="exit"
+            puts "That was not a valid input. Please enter a number from 1-3 or type 'exit'."
+            get_recipes
+        end
     end
 
     def print_recipe
