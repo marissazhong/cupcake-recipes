@@ -44,10 +44,10 @@ class CupcakeRecipes::Recipes
         ingredients, directions = [],[]
 
         doc.css(".wprm-recipe-ingredient").each {|ingredient|
-            ingredients << "#{ingredient.css(".wprm-recipe-ingredient-amount").inner_html} #{ingredient.css(".wprm-recipe-ingredient-unit").inner_html} #{ingredient.css(".wprm-recipe-ingredient-name").inner_html}"
+            ingredients << "#{ingredient.css(".wprm-recipe-ingredient-amount").inner_text} #{ingredient.css(".wprm-recipe-ingredient-unit").inner_text} #{ingredient.css(".wprm-recipe-ingredient-name").inner_text}"
         }
         doc.css(".wprm-recipe-instruction-text").each {|direction|
-            directions << direction.inner_html
+            directions << direction.inner_text
         }
         recipe = {ingredients: ingredients, directions: directions}
     end
@@ -84,16 +84,29 @@ class CupcakeRecipes::Recipes
             recipe_name = recipe.text.strip
             recipe_url = recipe.attribute('href').value
             if recipe_name.include?("Vanilla Cupcake")
-                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sally's Baking Addiction"}
+                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sally's Baking Addiction", recipe: scrape_sba_recipe(recipe_url)}
             elsif recipe_name.include?("Chocolate Cupcake")
-                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sally's Baking Addiction"}
+                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sally's Baking Addiction", recipe: scrape_sba_recipe(recipe_url)}
             elsif recipe_name.include?("Cupcake")
-                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Sally's Baking Addiction"}
+                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Sally's Baking Addiction", recipe: scrape_sba_recipe(recipe_url)}
             end
             }
             i += 1
         end
         recipes_sba = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
+    end
+
+    def self.scrape_sba_recipe(recipe_url)
+        doc = Nokogiri::HTML(open(recipe_url))
+        ingredients, directions = [],[]
+
+        doc.css(".ingredient").each {|ingredient|
+            ingredients << ingredient.inner_text
+        }
+        doc.css(".instructions ol li").each {|direction|
+            directions << direction.inner_text
+        }
+        recipe = {ingredients: ingredients, directions: directions}
     end
 
 end

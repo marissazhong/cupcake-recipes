@@ -24,6 +24,7 @@ class CupcakeRecipes::CLI
         @recipes = CupcakeRecipes::Recipes.scrape_all_recipes
         if input_flavor == "1" || input_flavor == "2" || input_flavor == "3"
             @sorted_recipes = @recipes[input_flavor.to_i-1].sort {|x,y| x[:name] <=> y[:name]}
+            puts @sorted_recipes
             @sorted_recipes.each.with_index(1) {|recipe,i|
                 puts "#{i}. #{recipe[:name]} - #{recipe[:source]}"
             }
