@@ -2,6 +2,8 @@
 
 Welcome to my cupcake recipes gem! In my spare time and for special occasions I enjoy baking, in particular cupcakes. There are endless variations to try and I find myself using a variety of recipes from different websites. Therefore, I built this gem to scrap recipes from several of my favorite food/baking blogs to consolidate recipes in one place. 
 
+This gem will first ask you to choose which category of cupcake recipe you are interested in (vanilla, chocolate, or other). Then, you will be able to choose which recipe you would like to see. Happy baking!
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Run cupcake-recipes after installing the gem.
 
 ## Development
 

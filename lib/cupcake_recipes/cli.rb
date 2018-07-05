@@ -33,13 +33,12 @@ class CupcakeRecipes::CLI
         elsif input_flavor!="exit"
             puts "That was not a valid input. Please enter a number from 1-3 or type 'exit'."
             get_recipes
-            print_recipe
         end
     end
 
     def print_recipe
         input_recipe = nil
-        while input_recipe != 'exit'
+        while input_recipe != "exit"
             puts "Enter the number of the recipe you'd like to see or type 'exit':"
             input_recipe = gets.strip.downcase
             # Invalid input cases are:
@@ -66,9 +65,9 @@ class CupcakeRecipes::CLI
                 end
                 puts "Would you like to see another recipe? (y/n):"
                 continue = gets.strip.downcase
-                if continue == 'y'
+                if continue == "y"
                     get_recipes
-                elsif continue == 'n'
+                elsif continue == "n"
                     break
                 end
             end
