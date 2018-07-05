@@ -24,8 +24,9 @@ class CupcakeRecipes::CLI
     def get_recipes
         puts "What flavor cupcake would you like to bake?", "(Enter 1-3 or 'exit' for 1. Vanilla, 2. Chocolate, and 3. I'm feeling adventurous!)"
         input_flavor = gets.strip
+        flavors = ["Vanilla", "Chocolate", "Lucky"]
         if input_flavor == "1" || input_flavor == "2" || input_flavor == "3"
-            @sorted_recipes = @recipes[input_flavor.to_i-1].sort_by {|recipe| recipe.name}
+            @sorted_recipes = @recipes.select {|recipe| recipe.type == flavors[input_flavor.to_i-1]}.sort_by {|recipe| recipe.name}
             @sorted_recipes.each.with_index(1) {|recipe,i|
                 puts "#{i}. #{recipe.name} - #{recipe.source}"
             }
