@@ -32,13 +32,16 @@ class CupcakeRecipes::CLI
     end
 
     def print_recipe
-        continue = 'y'
-        while continue == 'y'
-            puts "Enter the number of the recipe you'd like to see:"
+        input_recipe = nil
+        while input_recipe != 'exit'
+            puts "Enter the number of the recipe you'd like to see or type 'exit':"
             input_recipe = gets.strip.downcase
-            puts "recipe here"
-            puts "Would you like to see another recipe? (y/n):"
-            continue = gets.strip.downcase
+            if input_recipe != 'exit'
+                puts "recipe here"
+                puts "Would you like to see another recipe? (y/n):"
+                continue = gets.strip.downcase
+                get_recipes if continue == 'y'
+            end
         end
     end
 
