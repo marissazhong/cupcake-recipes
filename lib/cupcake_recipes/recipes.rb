@@ -29,17 +29,17 @@ class CupcakeRecipes::Recipes
             recipe_name = recipe.text.strip
             recipe_url = recipe.attribute('href').value
             if recipe_name.include?("Vanilla Cupcake")
-                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_recipe(recipe_url)}
+                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_ssr_recipe(recipe_url)}
             elsif recipe_name.include?("Chocolate Cupcake")
-                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_recipe(recipe_url)}
+                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_ssr_recipe(recipe_url)}
             elsif recipe_name.include?("Cupcake")
-                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_recipe(recipe_url)}
+                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_ssr_recipe(recipe_url)}
             end
         }
         recipes_nk = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
     end
 
-    def self.scrape_nk_recipe(recipe_url)
+    def self.scrape_nk_ssr_recipe(recipe_url)
         doc = Nokogiri::HTML(open(recipe_url))
         ingredients, directions = [],[]
 
@@ -60,11 +60,11 @@ class CupcakeRecipes::Recipes
         recipe_name = recipe.text.strip
         recipe_url = recipe.attribute('href').value
             if recipe_name.include?("Vanilla Cupcake")
-                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sugar Spun Run"}
+                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sugar Spun Run", recipe: scrape_nk_ssr_recipe(recipe_url)}
             elsif recipe_name.include?("Chocolate Cupcake")
-                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sugar Spun Run"}
+                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sugar Spun Run", recipe: scrape_nk_ssr_recipe(recipe_url)}
             elsif recipe_name.include?("Cupcake")
-                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Sugar Spun Run"}
+                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Sugar Spun Run", recipe: scrape_nk_ssr_recipe(recipe_url)}
             end
         }
         recipes_ssr = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
