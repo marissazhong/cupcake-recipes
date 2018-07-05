@@ -5,7 +5,7 @@
 # 2. Prompt the user to input what type of cupcake recipe they'd like (vanilla, chocolate, or "I'm feeling adventurous!")
 # 3. Display a list of matching recipes scraped from Natasha's Kitchen, Sugar Spun Run, and Sally's Baking Addiction
 # 4. Prompt the user to input which recipe out of the list they'd like to use
-# 5. Display the recipe's ingredients, yield, and directions
+# 5. Display the recipe's ingredients and directions
 
 require "./lib/cupcake_recipes"
 

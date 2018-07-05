@@ -6,12 +6,11 @@ class CupcakeRecipes::CLI
         welcome
         scrape_recipes
         get_recipes
-        print_recipe
         goodbye
     end
 
     def welcome
-        puts "Welcome to Best Cupcake Recipes!"
+        puts "Welcome to Best Cupcake Recipes!", "Loading recipes..."
     end
 
     def goodbye
@@ -30,9 +29,11 @@ class CupcakeRecipes::CLI
             @sorted_recipes.each.with_index(1) {|recipe,i|
                 puts "#{i}. #{recipe[:name]} - #{recipe[:source]}"
             }
+            print_recipe
         elsif input_flavor!="exit"
             puts "That was not a valid input. Please enter a number from 1-3 or type 'exit'."
             get_recipes
+            print_recipe
         end
     end
 
@@ -41,8 +42,14 @@ class CupcakeRecipes::CLI
         while input_recipe != 'exit'
             puts "Enter the number of the recipe you'd like to see or type 'exit':"
             input_recipe = gets.strip.downcase
-            # need to implement more robust check for invalid input
-            if input_recipe != 'exit'
+            # Invalid input cases are:
+            # 1. Is not a postive integer and not "exit"
+            # 2. Is a positive integer but not a number on the given list
+            if (input_recipe =~ /\D/ && input_recipe != 'exit') || (input_recipe !~ /\D/ && (input_recipe.to_i > @sorted_recipes.length || input_recipe.to_i == 0))
+                puts "That was not a valid input."
+                print_recipe
+            elsif input_recipe != 'exit'
+                puts @sorted_recipes[input_recipe.to_i-1][:name]
                 puts "Ingredients:"
                 i = 0
                 ingredients = @sorted_recipes[input_recipe.to_i-1][:recipe][:ingredients]

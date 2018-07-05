@@ -17,10 +17,6 @@ class CupcakeRecipes::Recipes
         recipes = [recipes_vanilla, recipes_chocolate, recipes_lucky]
     end
 
-    def self.scrape_single_recipe
-
-    end
-
     def self.scrape_nk
         doc = Nokogiri::HTML(open("https://natashaskitchen.com/category/dessert/cupcakes/"))
         recipes_vanilla, recipes_chocolate, recipes_lucky = [], [], []
