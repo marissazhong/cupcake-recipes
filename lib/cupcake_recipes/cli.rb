@@ -25,9 +25,9 @@ class CupcakeRecipes::CLI
         puts "What flavor cupcake would you like to bake?", "(Enter 1-3 or 'exit' for 1. Vanilla, 2. Chocolate, and 3. I'm feeling adventurous!)"
         input_flavor = gets.strip
         if input_flavor == "1" || input_flavor == "2" || input_flavor == "3"
-            @sorted_recipes = @recipes[input_flavor.to_i-1].sort {|x,y| x[:name] <=> y[:name]}
+            @sorted_recipes = @recipes[input_flavor.to_i-1].sort_by {|recipe| recipe.name}
             @sorted_recipes.each.with_index(1) {|recipe,i|
-                puts "#{i}. #{recipe[:name]} - #{recipe[:source]}"
+                puts "#{i}. #{recipe.name} - #{recipe.source}"
             }
             print_recipe
         elsif input_flavor!="exit"
@@ -48,17 +48,17 @@ class CupcakeRecipes::CLI
                 puts "That was not a valid input."
                 print_recipe
             elsif input_recipe != 'exit'
-                puts @sorted_recipes[input_recipe.to_i-1][:name]
+                puts @sorted_recipes[input_recipe.to_i-1].name
                 puts "Ingredients:"
                 i = 0
-                ingredients = @sorted_recipes[input_recipe.to_i-1][:recipe][:ingredients]
+                ingredients = @sorted_recipes[input_recipe.to_i-1].recipe[:ingredients]
                 while i < ingredients.length
                     puts "#{i+1}. #{ingredients[i]}"
                     i+=1
                 end
                 puts "Directions:"
                 i = 0
-                directions = @sorted_recipes[input_recipe.to_i-1][:recipe][:directions]
+                directions = @sorted_recipes[input_recipe.to_i-1].recipe[:directions]
                 while i < directions.length
                     puts "#{i+1}. #{directions[i]}"
                     i+=1

@@ -7,6 +7,10 @@ class CupcakeRecipes::Recipes
 
     attr_accessor :name, :type, :url, :source, :recipe
 
+    def initialize(attributes)
+        attributes.each {|k,v| self.send(("#{k}="),v)}
+    end
+
     def self.scrape_all_recipes
         recipes_vanilla, recipes_chocolate, recipes_lucky = [], [], []
 
@@ -25,17 +29,29 @@ class CupcakeRecipes::Recipes
             recipe_name = recipe.text.strip
             recipe_url = recipe.attribute('href').value
             if recipe_name.include?("Vanilla Cupcake")
-                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_ssr_recipe(recipe_url)}
+                unless recipes_vanilla.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Vanilla", url: recipe_url, source: "Natasha's Kitchen"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_vanilla << new_cupcake
+                end
             elsif recipe_name.include?("Chocolate Cupcake")
-                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_ssr_recipe(recipe_url)}
+                unless recipes_chocolate.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Chocolate", url: recipe_url, source: "Natasha's Kitchen"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_chocolate << new_cupcake
+                end
             elsif recipe_name.include?("Cupcake")
-                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Natasha's Kitchen", recipe: scrape_nk_ssr_recipe(recipe_url)}
+                unless recipes_lucky.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Lucky", url: recipe_url, source: "Natasha's Kitchen"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_lucky << new_cupcake
+                end
             end
         }
-        recipes_nk = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
+        recipes_nk = [recipes_vanilla, recipes_chocolate, recipes_lucky]
     end
 
-    def self.scrape_nk_ssr_recipe(recipe_url)
+    def self.scrape_nk_ssr_recipe(cupcake_obj, recipe_url)
         doc = Nokogiri::HTML(open(recipe_url))
         ingredients, directions = [],[]
 
@@ -56,11 +72,23 @@ class CupcakeRecipes::Recipes
         recipe_name = recipe.text.strip
         recipe_url = recipe.attribute('href').value
             if recipe_name.include?("Vanilla Cupcake")
-                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sugar Spun Run", recipe: scrape_nk_ssr_recipe(recipe_url)}
+                unless recipes_vanilla.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sugar Spun Run"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_vanilla << new_cupcake
+                end
             elsif recipe_name.include?("Chocolate Cupcake")
-                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sugar Spun Run", recipe: scrape_nk_ssr_recipe(recipe_url)}
+                unless recipes_chocolate.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sugar Spun Run"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_chocolate << new_cupcake
+                end
             elsif recipe_name.include?("Cupcake")
-                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Sugar Spun Run", recipe: scrape_nk_ssr_recipe(recipe_url)}
+                unless recipes_lucky.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Lucky", url: recipe_url, source: "Sugar Spun Run"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_lucky << new_cupcake
+                end
             end
         }
         recipes_ssr = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
@@ -80,16 +108,28 @@ class CupcakeRecipes::Recipes
             recipe_name = recipe.text.strip
             recipe_url = recipe.attribute('href').value
             if recipe_name.include?("Vanilla Cupcake")
-                recipes_vanilla << {name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sally's Baking Addiction", recipe: scrape_sba_recipe(recipe_url)}
+                unless recipes_vanilla.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Vanilla", url: recipe_url, source: "Sally's Baking Addiction"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_vanilla << new_cupcake
+                end
             elsif recipe_name.include?("Chocolate Cupcake")
-                recipes_chocolate << {name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sally's Baking Addiction", recipe: scrape_sba_recipe(recipe_url)}
+                unless recipes_chocolate.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Chocolate", url: recipe_url, source: "Sally's Baking Addiction"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_chocolate << new_cupcake
+                end
             elsif recipe_name.include?("Cupcake")
-                recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Sally's Baking Addiction", recipe: scrape_sba_recipe(recipe_url)}
+                unless recipes_lucky.any?{|recipe| recipe.name == recipe_name}
+                    new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, type: "Lucky", url: recipe_url, source: "Sally's Baking Addiction"})
+                    new_cupcake.recipe = scrape_nk_ssr_recipe(new_cupcake, recipe_url)
+                    recipes_lucky << new_cupcake
+                end
             end
             }
             i += 1
         end
-        recipes_sba = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
+        recipes_sba = [recipes_vanilla, recipes_chocolate, recipes_lucky]
     end
 
     def self.scrape_sba_recipe(recipe_url)
@@ -97,11 +137,9 @@ class CupcakeRecipes::Recipes
         ingredients, directions = [],[]
 
         doc.css(".ingredient").each {|ingredient|
-            ingredients << ingredient.inner_text
-        }
+            ingredients << ingredient.inner_text}
         doc.css(".instructions ol li").each {|direction|
-            directions << direction.inner_text
-        }
+            directions << direction.inner_text}
         recipe = {ingredients: ingredients, directions: directions}
     end
 
