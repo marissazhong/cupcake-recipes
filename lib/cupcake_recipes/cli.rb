@@ -23,11 +23,11 @@ class CupcakeRecipes::CLI
         @recipes = CupcakeRecipes::Recipes.scrape_recipes
         case
         when input_flavor=="1"
-            @recipes[0]
+            puts @recipes[0]
         when input_flavor=="2"
-            @recipes[1]
+            puts @recipes[1]
         when input_flavor=="3"
-            @recipes[2]
+            puts @recipes[2]
         when input_flavor!="exit"
             puts "That was not a valid input. Please enter a number from 1-3 or type 'exit'."
             get_recipes
@@ -43,7 +43,11 @@ class CupcakeRecipes::CLI
                 puts "recipe here"
                 puts "Would you like to see another recipe? (y/n):"
                 continue = gets.strip.downcase
-                get_recipes if continue == 'y'
+                if continue == 'y'
+                    get_recipes
+                elsif continue == 'n'
+                    break
+                end
             end
         end
     end
