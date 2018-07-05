@@ -21,14 +21,12 @@ class CupcakeRecipes::CLI
         puts "What flavor cupcake would you like to bake?", "(Enter 1-3 or 'exit' for 1. Vanilla, 2. Chocolate, and 3. I'm feeling adventurous!)"
         input_flavor = gets.strip
         @recipes = CupcakeRecipes::Recipes.scrape_recipes
-        case
-        when input_flavor=="1"
-            puts @recipes[0]
-        when input_flavor=="2"
-            puts @recipes[1]
-        when input_flavor=="3"
-            puts @recipes[2]
-        when input_flavor!="exit"
+        if input_flavor == "1" || input_flavor == "2" || input_flavor == "3"
+            sorted_recipes = @recipes[input_flavor.to_i-1].sort {|x,y| x[:name] <=> y[:name]}
+            sorted_recipes.each.with_index(1) {|recipe,i|
+                puts "#{i}. #{recipe[:name]} - #{recipe[:source]}"
+            }
+        elsif input_flavor!="exit"
             puts "That was not a valid input. Please enter a number from 1-3 or type 'exit'."
             get_recipes
         end
