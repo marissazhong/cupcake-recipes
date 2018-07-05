@@ -4,6 +4,7 @@ class CupcakeRecipes::CLI
 
     def call
         welcome
+        scrape_recipes
         get_recipes
         print_recipe
         goodbye
@@ -17,14 +18,15 @@ class CupcakeRecipes::CLI
         puts "Thanks for using Best Cupcake Recipes. I bet you made something delicious!"
     end
 
+    def scrape_recipes
+        @recipes = CupcakeRecipes::Recipes.scrape_all_recipes
+    end
+
     def get_recipes
         puts "What flavor cupcake would you like to bake?", "(Enter 1-3 or 'exit' for 1. Vanilla, 2. Chocolate, and 3. I'm feeling adventurous!)"
         input_flavor = gets.strip
-        # need to implement method to store scraped recipes over multiple iterations
-        @recipes = CupcakeRecipes::Recipes.scrape_all_recipes
         if input_flavor == "1" || input_flavor == "2" || input_flavor == "3"
             @sorted_recipes = @recipes[input_flavor.to_i-1].sort {|x,y| x[:name] <=> y[:name]}
-            puts @sorted_recipes
             @sorted_recipes.each.with_index(1) {|recipe,i|
                 puts "#{i}. #{recipe[:name]} - #{recipe[:source]}"
             }
@@ -41,9 +43,20 @@ class CupcakeRecipes::CLI
             input_recipe = gets.strip.downcase
             # need to implement more robust check for invalid input
             if input_recipe != 'exit'
-                
-
-
+                puts "Ingredients:"
+                i = 0
+                ingredients = @sorted_recipes[input_recipe.to_i-1][:recipe][:ingredients]
+                while i < ingredients.length
+                    puts "#{i+1}. #{ingredients[i]}"
+                    i+=1
+                end
+                puts "Directions:"
+                i = 0
+                directions = @sorted_recipes[input_recipe.to_i-1][:recipe][:directions]
+                while i < directions.length
+                    puts "#{i+1}. #{directions[i]}"
+                    i+=1
+                end
                 puts "Would you like to see another recipe? (y/n):"
                 continue = gets.strip.downcase
                 if continue == 'y'
