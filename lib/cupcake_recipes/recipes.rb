@@ -32,7 +32,7 @@ class CupcakeRecipes::Recipes
                 recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Natasha's Kitchen"}
             end
         }
-        recipes_nk = [recipes_vanilla, recipes_chocolate, recipes_lucky]
+        recipes_nk = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
     end
 
     def self.scrape_nk_recipe(recipe_url)
@@ -62,7 +62,7 @@ class CupcakeRecipes::Recipes
                 recipes_lucky << {name: recipe_name, type: "Lucky", url: recipe_url, source: "Sugar Spun Run"}
             end
         }
-        recipes_ssr = [recipes_vanilla, recipes_chocolate, recipes_lucky]
+        recipes_ssr = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
     end
 
     def self.scrape_sba
@@ -88,7 +88,7 @@ class CupcakeRecipes::Recipes
             }
             i += 1
         end
-        recipes_sba = [recipes_vanilla, recipes_chocolate, recipes_lucky]
+        recipes_sba = [recipes_vanilla.uniq, recipes_chocolate.uniq, recipes_lucky.uniq]
     end
 
 end
