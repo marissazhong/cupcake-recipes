@@ -21,14 +21,14 @@ class CupcakeRecipes::Recipes
         doc = Nokogiri::HTML(open("https://natashaskitchen.com/category/dessert/cupcakes/"))
         recipes_vanilla, recipes_chocolate, recipes_lucky = [], [], []
 
-        doc.css("div.li-a a").each {|recipe| 
+        doc.css("div.li-a a").each {|recipe|
             recipe_name = recipe.text
-            recipe_url = recipe.href
-            if recipe_name.include("vanilla cupcake")
+            recipe_url = recipe.attribute('href')
+            if recipe_name.include?("vanilla cupcake")
                 recipes_vanilla << {name: recipe_name, type: "vanilla", url: recipe_url, source: "Natasha's Kitchen"}
-            elsif recipe_name.include("chocolate cupcake")
+            elsif recipe_name.include?("chocolate cupcake")
                 recipes_chocolate << {name: recipe_name, type: "chocolate", url: recipe_url, source: "Natasha's Kitchen"}
-            elsif recipe_name.include("cupcake")
+            elsif recipe_name.include?("cupcake")
                 recipes_lucky << {name: recipe_name, type: "lucky", url: recipe_url, source: "Natasha's Kitchen"}
             end
         }
@@ -53,12 +53,12 @@ class CupcakeRecipes::Recipes
 
         doc.css(".rititle.rinojs.always p a").each {|recipe|
             recipe_name = recipe.text
-            recipe_url = recipe.href
-            if recipe_name.include("vanilla cupcake")
+            recipe_url = recipe.attribute('href')
+            if recipe_name.include?("vanilla cupcake")
                 recipes_vanilla << {name: recipe_name, type: "vanilla", url: recipe_url, source: "Sugar Spun Run"}
-            elsif recipe_name.include("chocolate cupcake")
+            elsif recipe_name.include?("chocolate cupcake")
                 recipes_chocolate << {name: recipe_name, type: "chocolate", url: recipe_url, source: "Sugar Spun Run"}
-            elsif recipe_name.include("cupcake")
+            elsif recipe_name.include?("cupcake")
                 recipes_lucky << {name: recipe_name, type: "lucky", url: recipe_url, source: "Sugar Spun Run"}
             end
         }
@@ -66,25 +66,28 @@ class CupcakeRecipes::Recipes
     end
 
     def self.scrape_sba
-        doc1 = Nokogiri::HTML(open("https://sallysbakingaddiction.com/category/cupcakes/")) # page 1 of 4
-        doc2 = Nokogiri::HTML(open("https://sallysbakingaddiction.com/category/cupcakes/page/2/")) # page 2 of 4
-        doc3 = Nokogiri::HTML(open("https://sallysbakingaddiction.com/category/cupcakes/page/3/")) # page 3 of 4
-        doc4 = Nokogiri::HTML(open("https://sallysbakingaddiction.com/category/cupcakes/page/4/")) # page 4 of 4
-        #not sure if this works
-        doc = [doc1, doc2, doc3, doc4].flatten
-        recipes_vanilla, recipes_chocolate, recipes_lucky = [], [], []
+         recipes_vanilla, recipes_chocolate, recipes_lucky = [], [], []
 
-        doc.css(".uabb-post-heading.uabb-blog-post-section a").each {|recipe|
-        recipe_name = recipe.text
-        recipe_url = recipe.href
-        if recipe_name.include("vanilla cupcake")
-            recipes_vanilla << {name: recipe_name, type: "vanilla", url: recipe_url, source: "Sally's Baking Addiction"}
-        elsif recipe_name.include("chocolate cupcake")
-            recipes_chocolate << {name: recipe_name, type: "chocolate", url: recipe_url, source: "Sally's Baking Addiction"}
-        elsif recipe_name.include("cupcake")
-            recipes_lucky << {name: recipe_name, type: "lucky", url: recipe_url, source: "Sally's Baking Addiction"}
+        i = 1
+        while i < 5
+            if i == 1
+                doc = Nokogiri::HTML(open("https://sallysbakingaddiction.com/category/cupcakes/"))
+            else
+                doc = Nokogiri::HTML(open("https://sallysbakingaddiction.com/category/cupcakes/page/#{i}/"))
+            end
+            doc.css(".uabb-post-heading.uabb-blog-post-section a").each {|recipe|
+            recipe_name = recipe.text
+            recipe_url = recipe.attribute('href')
+            if recipe_name.include?("vanilla cupcake")
+                recipes_vanilla << {name: recipe_name, type: "vanilla", url: recipe_url, source: "Sally's Baking Addiction"}
+            elsif recipe_name.include?("chocolate cupcake")
+                recipes_chocolate << {name: recipe_name, type: "chocolate", url: recipe_url, source: "Sally's Baking Addiction"}
+            elsif recipe_name.include?("cupcake")
+                recipes_lucky << {name: recipe_name, type: "lucky", url: recipe_url, source: "Sally's Baking Addiction"}
+            end
+            }
+            i += 1
         end
-        }
         recipes_sba = [recipes_vanilla, recipes_chocolate, recipes_lucky]
     end
 
