@@ -15,26 +15,28 @@ class CupcakeRecipes::Recipes
         recipes = [self.scrape_nk, self.scrape_ssr, self.scrape_sba].flatten(1)
     end
 
+    def self.create_cupcake(recipe_element, blog_name, recipe_obj, recipes_arr)
+        recipe_name = recipe_element.text.strip
+        if recipe_name.include?("Cupcake") && !recipes_arr.any?{|recipe| recipe.name == recipe_name}
+            new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, url: recipe_element.attribute('href').value, source: blog_name, recipe: recipe_obj})
+            if recipe_name.include?("Vanilla Cupcake")
+                    new_cupcake.type = "Vanilla"
+            elsif recipe_name.include?("Chocolate Cupcake")
+                    new_cupcake.type = "Chocolate"
+            else
+                    new_cupcake.type = "Lucky"
+            end
+            recipes_arr << new_cupcake
+        end
+        recipes_arr
+    end
+
     def self.scrape_nk
         doc = Nokogiri::HTML(open("https://natashaskitchen.com/category/dessert/cupcakes/"))
         recipes_nk = []
 
         doc.css("div.li-a a").each {|recipe|
-            recipe_name = recipe.text.strip
-            recipe_url = recipe.attribute('href').value
-            if recipe_name.include?("Cupcake") && !recipes_nk.any?{|recipe| recipe.name == recipe_name}
-                new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, url: recipe_url, source: "Natasha's Kitchen"})
-                if recipe_name.include?("Vanilla Cupcake")
-                        new_cupcake.type = "Vanilla"
-                elsif recipe_name.include?("Chocolate Cupcake")
-                        new_cupcake.type = "Chocolate"
-                else
-                        new_cupcake.type = "Lucky"
-                end
-                new_cupcake.recipe = scrape_nk_ssr_recipe(recipe_url)
-                recipes_nk << new_cupcake
-            end
-        }
+            create_cupcake(recipe, "Natasha's Kitchen", scrape_nk_ssr_recipe(recipe.attribute('href').value), recipes_nk)}
         recipes_nk
     end
 
@@ -56,21 +58,7 @@ class CupcakeRecipes::Recipes
         recipes_ssr = []
 
         doc.css(".rititle.rinojs.always p a").each {|recipe|
-        recipe_name = recipe.text.strip
-        recipe_url = recipe.attribute('href').value
-        if recipe_name.include?("Cupcake") && !recipes_ssr.any?{|recipe| recipe.name == recipe_name}
-            new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, url: recipe_url, source: "Sugar Spun Run"})
-            if recipe_name.include?("Vanilla Cupcake")
-                    new_cupcake.type = "Vanilla"
-            elsif recipe_name.include?("Chocolate Cupcake")
-                    new_cupcake.type = "Chocolate"
-            else
-                    new_cupcake.type = "Lucky"
-            end
-            new_cupcake.recipe = scrape_nk_ssr_recipe(recipe_url)
-            recipes_ssr << new_cupcake
-        end
-        }
+            create_cupcake(recipe, "Sugar Spun Run", scrape_nk_ssr_recipe(recipe.attribute('href').value), recipes_ssr)}
         recipes_ssr
     end
 
@@ -85,21 +73,7 @@ class CupcakeRecipes::Recipes
                 doc = Nokogiri::HTML(open("https://sallysbakingaddiction.com/category/cupcakes/page/#{i}/"))
             end
             doc.css(".uabb-post-heading.uabb-blog-post-section a").each {|recipe|
-            recipe_name = recipe.text.strip
-            recipe_url = recipe.attribute('href').value
-            if recipe_name.include?("Cupcake") && !recipes_sba.any?{|recipe| recipe.name == recipe_name}
-                new_cupcake = CupcakeRecipes::Recipes.new({name: recipe_name, url: recipe_url, source: "Sally's Baking Addiction"})
-                if recipe_name.include?("Vanilla Cupcake")
-                        new_cupcake.type = "Vanilla"
-                elsif recipe_name.include?("Chocolate Cupcake")
-                        new_cupcake.type = "Chocolate"
-                else
-                        new_cupcake.type = "Lucky"
-                end
-                new_cupcake.recipe = scrape_sba_recipe(recipe_url)
-                recipes_sba << new_cupcake
-            end
-            }
+                create_cupcake(recipe, "Sally's Baking Addiction", scrape_sba_recipe(recipe.attribute('href').value), recipes_sba)}
             i += 1
         end
         recipes_sba
@@ -115,5 +89,4 @@ class CupcakeRecipes::Recipes
             directions << direction.inner_text}
         recipe = {ingredients: ingredients, directions: directions}
     end
-
 end

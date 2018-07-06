@@ -69,7 +69,7 @@ class CupcakeRecipes::CLI
                 if continue == "y"
                     get_recipes
                 elsif continue == "n"
-                    return nil
+                    input_recipe = "exit"
                 end
             end
         end
