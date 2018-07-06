@@ -31,7 +31,7 @@ class CupcakeRecipes::CLI
                 puts "#{i}. #{recipe.name} - #{recipe.source}"
             }
             print_recipe
-        elsif input_flavor!="exit"
+        elsif input_flavor != "exit"
             puts "That was not a valid input. Please enter a number from 1-3 or type 'exit'."
             get_recipes
         end
@@ -45,10 +45,10 @@ class CupcakeRecipes::CLI
             # Invalid input cases are:
             # 1. Is not a postive integer and not "exit"
             # 2. Is a positive integer but not a number on the given list
-            if (input_recipe =~ /\D/ && input_recipe != 'exit') || (input_recipe !~ /\D/ && (input_recipe.to_i > @sorted_recipes.length || input_recipe.to_i == 0))
+            if (input_recipe =~ /\D/ && input_recipe != "exit") || (input_recipe !~ /\D/ && (input_recipe.to_i > @sorted_recipes.length || input_recipe.to_i == 0))
                 puts "That was not a valid input."
                 print_recipe
-            elsif input_recipe != 'exit'
+            elsif input_recipe != "exit"
                 puts @sorted_recipes[input_recipe.to_i-1].name
                 puts "Ingredients:"
                 i = 0
@@ -64,15 +64,13 @@ class CupcakeRecipes::CLI
                     puts "#{i+1}. #{directions[i]}"
                     i+=1
                 end
+                input_recipe = "exit"
                 puts "Would you like to see another recipe? (y/n):"
                 continue = gets.strip.downcase
                 if continue == "y"
                     get_recipes
-                elsif continue == "n"
-                    input_recipe = "exit"
                 end
             end
         end
     end
-
 end
