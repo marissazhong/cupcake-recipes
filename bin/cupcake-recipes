@@ -7,6 +7,6 @@
 # 4. Prompt the user to input which recipe out of the list they'd like to use
 # 5. Display the recipe's ingredients and directions
 
-require "./lib/cupcake_recipes"
+require_relative "../lib/cupcake_recipes"
 
 CupcakeRecipes::CLI.new.call

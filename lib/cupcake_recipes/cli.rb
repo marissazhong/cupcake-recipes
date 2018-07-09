@@ -10,7 +10,7 @@ class CupcakeRecipes::CLI
     end
 
     def welcome
-        puts "Welcome to Best Cupcake Recipes!", "Loading recipes..."
+        puts "Welcome to Best Cupcake Recipes!"
     end
 
     def goodbye
@@ -18,7 +18,7 @@ class CupcakeRecipes::CLI
     end
 
     def scrape_recipes
-        @recipes = CupcakeRecipes::Recipes.scrape_all_recipes
+        @recipes = CupcakeRecipes::Scraper.scrape_all_recipes
     end
 
     def get_recipes
@@ -50,6 +50,9 @@ class CupcakeRecipes::CLI
                 print_recipe
             elsif input_recipe != "exit"
                 puts @sorted_recipes[input_recipe.to_i-1].name
+                #first check if I already have ingredients  - if not -
+                #call scraper A if recipe.source = whatever and hand it @sorted_recipes[input_recipe.to_i-1].url
+                #else call the other one
                 puts "Ingredients:"
                 i = 0
                 ingredients = @sorted_recipes[input_recipe.to_i-1].recipe[:ingredients]
