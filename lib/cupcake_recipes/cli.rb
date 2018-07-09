@@ -50,9 +50,13 @@ class CupcakeRecipes::CLI
                 print_recipe
             elsif input_recipe != "exit"
                 puts @sorted_recipes[input_recipe.to_i-1].name
-                #first check if I already have ingredients  - if not -
-                #call scraper A if recipe.source = whatever and hand it @sorted_recipes[input_recipe.to_i-1].url
-                #else call the other one
+                if @sorted_recipes[input_recipe.to_i-1].respond_to? :recipe
+                    if @sorted_recipes[input_recipe.to_i-1].source == "Natasha's Kitchen" || @sorted_recipes[input_recipe.to_i-1].source == "Sugar Spun Run"
+                        @sorted_recipes[input_recipe.to_i-1].recipe = CupcakeRecipes::Scraper.scrape_nk_ssr_recipe(@sorted_recipes[input_recipe.to_i-1].url)
+                    elsif @sorted_recipes[input_recipe.to_i-1].source == "Sally's Baking Addiction"
+                        @sorted_recipes[input_recipe.to_i-1].recipe = CupcakeRecipes::Scraper.scrape_sba_recipe(@sorted_recipes[input_recipe.to_i-1].url)
+                    end
+                end
                 puts "Ingredients:"
                 i = 0
                 ingredients = @sorted_recipes[input_recipe.to_i-1].recipe[:ingredients]
